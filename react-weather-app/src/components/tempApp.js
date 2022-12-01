@@ -4,16 +4,18 @@ import { Fragment, useState } from 'react';
 
 const TempApp = () => {
   const [city, setCity] = useState(null);
-  const [search, setSearch] = useState('mumbai');
+  const [search, setSearch] = useState('kathmandu');
 
   useEffect(() => {
     const fetchApi = async () => {
-      const url = `http://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=5&appid=97c86800efa5014b6c21f54f1d39a484`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=97c86800efa5014b6c21f54f1d39a484`;
       const response = await fetch(url);
       const resJson = await response.json();
-      console.log(resJson);
+
+      setCity(resJson.main);
     };
-  });
+    fetchApi();
+  }, [search]);
 
   return (
     <Fragment>
@@ -22,21 +24,30 @@ const TempApp = () => {
           <input
             type="search"
             className="inputField"
-            onChange={(event) => {}}
+            onChange={(event) => {
+              setSearch(event.target.value);
+            }}
           ></input>
         </div>
+        {!city ? (
+          <p>No Data Found</p>
+        ) : (
+          <div>
+            <div className="info">
+              <h2 className="location">
+                <i className="fas fa-street-view"> </i> {search}
+              </h2>
+              <h1 className="temp">{city.temp.toFixed(0)}° Cel </h1>
+              <h3 className="minmax">
+                Min: {city.temp_min}° Cel | Max:{city.temp_max}° Cel
+              </h3>
+            </div>
 
-        <div className="info">
-          <h2 className="location">
-            <i className="fas fa-street-view"> </i> Pune
-          </h2>
-          <h1 className="temp"> 5.25 Cel</h1>
-          <h3 className="minmax">Min:5.25 cel | Max : 5.25 Cel </h3>
-        </div>
-
-        <div className="wave -one"></div>
-        <div className="wave -two"></div>
-        <div className="wave -three"></div>
+            <div className="wave -one"></div>
+            <div className="wave -two"></div>
+            <div className="wave -three"></div>
+          </div>
+        )}
       </div>
     </Fragment>
   );
