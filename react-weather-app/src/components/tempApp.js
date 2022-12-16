@@ -24,6 +24,7 @@ const TempApp = () => {
           <input
             type="search"
             className="inputField"
+            placeholder="Search"
             onChange={(event) => {
               setSearch(event.target.value);
             }}
